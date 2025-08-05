@@ -1,68 +1,77 @@
 ﻿using System;
-
 class Program
 {
     static void Main()
     {
-        Console.WriteLine("DCIT318 Assignment 1");
-        Console.WriteLine("Select a task:");
-        Console.WriteLine("1. Ticket Price Calculator");
-        Console.WriteLine("2. Grade Calculator");
-        Console.WriteLine("3. Triangle Type Identifier");
-        Console.Write("Enter an option: ");
+        bool running = true;
 
-        string choice = Console.ReadLine();
-
-        switch (choice)
+        while (running)
         {
-            case "1":
-                TicketPriceCalculator();
-                break;
-            case "2":
-                GradeCalculator();
-                break;
-            case "3":
-                TriangleTypeIdentifier();
-                break;
-            default:
-                Console.WriteLine("Invalid choice. Exiting...");
-                break;
+            Console.WriteLine("\n--- DCIT318 Assignment 1 ---");
+            Console.WriteLine("Select a task:");
+            Console.WriteLine("1. Ticket Price Calculator");
+            Console.WriteLine("2. Grade Calculator");
+            Console.WriteLine("3. Triangle Type Identifier");
+            Console.WriteLine("4. Exit");
+            Console.Write("Enter an option: ");
+
+            string choice = Console.ReadLine();
+
+            switch (choice)
+            {
+                case "1":
+                    TicketPriceCalculator();
+                    break;
+                case "2":
+                    GradeCalculator();
+                    break;
+                case "3":
+                    TriangleTypeIdentifier();
+                    break;
+                case "4":
+                    running = false;
+                    Console.WriteLine("Goodbye...");
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. Please try again.");
+                    break;
+            }
         }
     }
-
     static void TicketPriceCalculator()
     {
         Console.WriteLine("\n--- Ticket Price Calculator ---");
 
-        Console.Write("Enter your age: ");
-        string input = Console.ReadLine();
-
-        bool isValidAge = int.TryParse(input, out int age);
-
-        if (!isValidAge || age < 0)
+        int age;
+        while (true)
         {
-            Console.WriteLine("Invalid age entered.");
-            return;
+            Console.Write("Enter your age: ");
+            string input = Console.ReadLine();
+
+            if (int.TryParse(input, out age) && age >= 0)
+                break;
+
+            Console.WriteLine("Invalid age. Please enter a valid non-negative number.");
         }
 
         int ticketPrice = (age <= 12 || age >= 65) ? 7 : 10;
 
         Console.WriteLine($"Your ticket price is: GHC{ticketPrice}");
     }
-
     static void GradeCalculator()
     {
         Console.WriteLine("\n--- Grade Calculator ---");
 
-        Console.Write("Enter your grade (0 - 100): ");
-        string input = Console.ReadLine();
-
-        bool isValid = int.TryParse(input, out int grade);
-
-        if (!isValid || grade < 0 || grade > 100)
+        int grade;
+        while (true)
         {
-            Console.WriteLine("Invalid input. Enter a number between 0 and 100.");
-            return;
+            Console.Write("Enter your grade (0 - 100): ");
+            string input = Console.ReadLine();
+
+            if (int.TryParse(input, out grade) && grade >= 0 && grade <= 100)
+                break;
+
+            Console.WriteLine("Invalid input. Please enter a number between 0 and 100.");
         }
 
         char letterGrade;
@@ -80,27 +89,13 @@ class Program
 
         Console.WriteLine($"Your grade is: {letterGrade}");
     }
-
     static void TriangleTypeIdentifier()
     {
         Console.WriteLine("\n--- Triangle Type Identifier ---");
 
-        Console.Write("Enter side 1: ");
-        string input1 = Console.ReadLine();
-        Console.Write("Enter side 2: ");
-        string input2 = Console.ReadLine();
-        Console.Write("Enter side 3: ");
-        string input3 = Console.ReadLine();
-
-        bool isValid1 = double.TryParse(input1, out double side1);
-        bool isValid2 = double.TryParse(input2, out double side2);
-        bool isValid3 = double.TryParse(input3, out double side3);
-
-        if (!isValid1 || !isValid2 || !isValid3 || side1 <= 0 || side2 <= 0 || side3 <= 0)
-        {
-            Console.WriteLine("Invalid input. Please enter positive numbers only.");
-            return;
-        }
+        double side1 = GetValidSide("Enter side 1: ");
+        double side2 = GetValidSide("Enter side 2: ");
+        double side3 = GetValidSide("Enter side 3: ");
 
         if (side1 + side2 <= side3 || side1 + side3 <= side2 || side2 + side3 <= side1)
         {
@@ -119,6 +114,20 @@ class Program
         else
         {
             Console.WriteLine("The triangle is Scalene.");
+        }
+    }
+    static double GetValidSide(string prompt)
+    {
+        double side;
+        while (true)
+        {
+            Console.Write(prompt);
+            string input = Console.ReadLine();
+
+            if (double.TryParse(input, out side) && side > 0)
+                return side;
+
+            Console.WriteLine("Invalid input. Please enter a positive number.");
         }
     }
 }
